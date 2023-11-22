@@ -1,0 +1,58 @@
+class ContadorPalavras:
+    def __init__(self):
+        self.observadores = []
+
+    def adicionar_observador(self, observador):
+        self.observadores.append(observador)
+
+    def notificar_observadores(self, frase):
+        for observador in self.observadores:
+            observador.atualizar(frase)
+
+class ObservadorPalavras:
+    def __init__(self, nome):
+        self.nome = nome
+        self.contagem_total = 0
+        self.contagem_pares = 0
+        self.contagem_maiusculas = 0
+
+    def atualizar(self, frase):
+        palavras = frase.split()
+
+        for palavra in palavras:
+            self.contagem_total += 1
+
+            if len(palavra) % 2 == 0:
+                self.contagem_pares += 1
+
+            if palavra[0].isupper():
+                self.contagem_maiusculas += 1
+
+    def mostrar_resultados(self):
+        print(f"Observador {self.nome}:")
+        print(f"Total de palavras: {self.contagem_total}")
+        print(f"Palavras com quantidade par de caracteres: {self.contagem_pares}")
+        print(f"Palavras começadas com maiúsculas: {self.contagem_maiusculas}")
+        print("\n")
+
+def main():
+    frase = input("Digite uma frase: ")
+
+    contador = ContadorPalavras()
+
+    observador_geral = ObservadorPalavras("Geral")
+    observador_pares = ObservadorPalavras("Pares")
+    observador_maiusculas = ObservadorPalavras("Maiúsculas")
+
+    contador.adicionar_observador(observador_geral)
+    contador.adicionar_observador(observador_pares)
+    contador.adicionar_observador(observador_maiusculas)
+
+    contador.notificar_observadores(frase)
+
+    observador_geral.mostrar_resultados()
+    observador_pares.mostrar_resultados()
+    observador_maiusculas.mostrar_resultados()
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,43 @@
+import unittest
+from io import StringIO
+from unittest.mock import patch
+
+class TestContadorPalavras(unittest.TestCase):
+    def test_contador_palavras(self):
+        contador = ContadorPalavras()
+
+        observador_geral = ObservadorPalavras("Geral")
+        observador_pares = ObservadorPalavras("Pares")
+        observador_maiusculas = ObservadorPalavras("Maiúsculas")
+
+        contador.adicionar_observador(observador_geral)
+        contador.adicionar_observador(observador_pares)
+        contador.adicionar_observador(observador_maiusculas)
+
+        frase = "Testando os observadores."
+
+        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+            contador.notificar_observadores(frase)
+
+            result = mock_stdout.getvalue().strip()
+
+        expected_result = """Observador Geral:
+Total de palavras: 4
+Palavras com quantidade par de caracteres: 2
+Palavras começadas com maiúsculas: 1
+
+Observador Pares:
+Total de palavras: 4
+Palavras com quantidade par de caracteres: 2
+Palavras começadas com maiúsculas: 1
+
+Observador Maiúsculas:
+Total de palavras: 4
+Palavras com quantidade par de caracteres: 2
+Palavras começadas com maiúsculas: 1
+"""
+
+        self.assertEqual(result, expected_result)
+
+if __name__ == '__main__':
+    unittest.main()
